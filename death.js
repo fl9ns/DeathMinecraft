@@ -1,9 +1,10 @@
+console.clear()
 const fs = require('fs')
 const http = require("http")
 const zlib = require('zlib')
 const readline = require('readline')
 
-const dir = '/home/mcje/spigotServer/logs/'
+const dirSpigot = '/home/spigotServer'
 const host = '0.0.0.0'
 const port = 8888
 
@@ -16,99 +17,32 @@ const requestListener = async function (req, res) {
 
 const server = http.createServer(requestListener);
 server.listen(port, host, () => {
-    console.log(`Server is running on http://${host}:${port}`);
+    console.log(`Server is running on http://${host}:${port}`)
 });
 
 async function getHTML() {
+
+    let usersList = fs.readFileSync(`${dirSpigot}/whitelist.json`, {encoding:'utf8', flag:'r'})
+    let users = JSON.parse(usersList)
+
+    
     let html = '<html><head><style>body{background-color:#333;color:#AAA;}table{border-collapse:collapse;}table,td{border:1px solid #AAA;}td{padding:2px;}</style></head><body>'
 
-    // Redah
-    let data = await getDeaths('RedKhey')
-    html += '<table>'
-    for(let i=0; i<data.length; i++) {
-        if(i === 0){
-            html += `<tr style="background-color:#777;color:#000;font-weight:bold;"><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
-        } else if(i === (data.length-1)) {
-            html += `<tr style="background-color:#A50;color:#000;font-weight:bold;"><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
-        } else {
-            html += `<tr><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
+    for(let u=0; u<users.length; u++) {
+
+        let data = await getDeaths(`${users[u].name}`)
+        html += '<table style="margin-bottom:10px;">'
+        for(let i=0; i<data.length; i++) {
+            if(i === 0){
+                html += `<tr style="background-color:#777;color:#000;font-weight:bold;"><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
+            } else if(i === (data.length-1)) {
+                html += `<tr style="background-color:#A50;color:#000;font-weight:bold;"><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
+            } else {
+                html += `<tr><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
+            }
         }
+        html += '</table>'
     }
-    html += '</table><hr/>'
-
-    // Ikki
-    data = await getDeaths('ikki95')
-    html += '<table>'
-    for(let i=0; i<data.length; i++) {
-        if(i === 0){
-            html += `<tr style="background-color:#777;color:#000;font-weight:bold;"><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
-        } else if(i === (data.length-1)) {
-            html += `<tr style="background-color:#A50;color:#000;font-weight:bold;"><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
-        } else {
-            html += `<tr><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
-        }
-    }
-    html += '</table><hr/>'
-
-    // Melinda
-    data = await getDeaths('melinnnndaaaa')
-    html += '<table>'
-    for(let i=0; i<data.length; i++) {
-        if(i === 0){
-            html += `<tr style="background-color:#777;color:#000;font-weight:bold;"><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
-        } else if(i === (data.length-1)) {
-            html += `<tr style="background-color:#A50;color:#000;font-weight:bold;"><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
-        } else {
-            html += `<tr><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
-        }
-    }
-    html += '</table><hr/>'
-
-    // Flens
-    data = await getDeaths('FL9NS')
-    html += '<table>'
-    for(let i=0; i<data.length; i++) {
-        if(i === 0){
-            html += `<tr style="background-color:#777;color:#000;font-weight:bold;"><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
-        } else if(i === (data.length-1)) {
-            html += `<tr style="background-color:#A50;color:#000;font-weight:bold;"><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
-        } else {
-            html += `<tr><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
-        }
-    }
-    html += '</table><hr/>'
-
-    // Jemikko
-    data = await getDeaths('Jemikko')
-    html += '<table>'
-    for(let i=0; i<data.length; i++) {
-        if(i === 0){
-            html += `<tr style="background-color:#777;color:#000;font-weight:bold;"><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
-        } else if(i === (data.length-1)) {
-            html += `<tr style="background-color:#A50;color:#000;font-weight:bold;"><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
-        } else {
-            html += `<tr><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
-        }
-    }
-    html += '</table><hr/>'
-
-    // Kadar
-    data = await getDeaths('KADAR5002')
-    html += '<table>'
-    for(let i=0; i<data.length; i++) {
-        if(i === 0){
-            html += `<tr style="background-color:#777;color:#000;font-weight:bold;"><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
-        } else if(i === (data.length-1)) {
-            html += `<tr style="background-color:#A50;color:#000;font-weight:bold;"><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
-        } else {
-            html += `<tr><td>${data[i][0]}</td><td style="text-align:center;">${data[i][1]}</td></tr>`
-        }
-    }
-    html += '</table><hr/>'
-
-
-
-
 
     html += '</body></html>'
     return html
@@ -119,9 +53,9 @@ async function getDeaths(user) {
     let death = {}
     let total = 0
 
-    for(let file of fs.readdirSync(dir)) {
+    for(let file of fs.readdirSync(`${dirSpigot}/logs`)) {
         if(file.endsWith('.gz')) {
-            for await (const line of readline.createInterface({input:fs.createReadStream(`${dir}${file}`).pipe(zlib.createGunzip())})) {
+            for await (const line of readline.createInterface({input:fs.createReadStream(`${dirSpigot}/logs/${file}`).pipe(zlib.createGunzip())})) {
                 if(line.indexOf(`${user}`) > -1
                 && line.indexOf(`[Server thread/INFO]: ${user}`) > -1
                 ) {
