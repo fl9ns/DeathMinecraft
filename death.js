@@ -15,7 +15,7 @@ async function main() {
         console.log('-------------------')
         for(let file of fs.readdirSync(dir)) {
             if(file.endsWith('.gz')) {
-                for await (const line of readline.createInterface({input:fs.createReadStream(`/home/flens/LOGmc/${file}`).pipe(zlib.createGunzip())})) {
+                for await (const line of readline.createInterface({input:fs.createReadStream(`${dir}${file}`).pipe(zlib.createGunzip())})) {
                     if(line.indexOf(`${user}`) > -1
                     && line.indexOf(`[Server thread/INFO]: ${user}`) > -1
                     ) {
